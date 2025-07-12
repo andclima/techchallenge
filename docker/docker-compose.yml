@@ -5,28 +5,28 @@ services:
     image: mariadb
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: ...
-      MARIADB_DATABASE: techchallenge
-      MARIADB_USER: admin
-      MARIADB_PASSWORD: ...
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     ports:
-      - "3340:3306"
+      - "3366:3306"
     volumes:
       - ./mariadb/data:/var/lib/mysql
       - ./mariadb/conf:/etc/mysql
 
-  app:
-    depends_on:
-      - db
-    # build: ./tomcat-build
-    image: tomcat:9-jre8
-    ports:
-      - "8082:8080"
-    volumes:
-      - ./tomcat/webapps/:/usr/local/tomcat/webapps/
-      - ./tomcat/logs/:/usr/local/tomcat/logs/
+#  app:
+#    depends_on:
+#      - db
+#    # build: ./tomcat-build
+#    image: tomcat:9-jre8
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./tomcat/webapps/:/usr/local/tomcat/webapps/
+#      - ./tomcat/logs/:/usr/local/tomcat/logs/
 
-networks:
-  default:
-    external: true
-    name: eth0
+#networks:
+#  default:
+#    driver: bridge
+#    external: true
