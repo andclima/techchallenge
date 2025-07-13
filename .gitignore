@@ -6,6 +6,8 @@ target/
 /docker/.env
 /docker/mariadb/data
 
+*.key
+
 ### STS ###
 .apt_generated
 .classpath

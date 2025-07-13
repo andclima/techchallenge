@@ -10,8 +10,8 @@ import java.util.UUID;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    public Optional<Usuario> findById(Long id);
-    public Optional<Usuario> findByEmail(String email);
-    public Optional<Usuario> findByUsername(String username);
-    public List<Usuario> findAllByNomeContainingIgnoreCase(String nome);
+    Optional<Usuario> findById(Long id);
+    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByUsername(String username);
+    List<Usuario> findAllByNomeContainingIgnoreCase(String nome);
 }
