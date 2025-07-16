@@ -15,6 +15,7 @@ services:
       - ./mariadb/data:/var/lib/mysql
       - ./mariadb/conf:/etc/mysql
 
+
 #  app:
 #    depends_on:
 #      - db

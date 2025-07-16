@@ -15,7 +15,7 @@ public class GerarSenhaTeste implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        String senhaLimpa = "admin123";
-        System.out.println("Senha limpa: " + senhaLimpa + " -> " + "Senha criptografada: " + encoder.encode(senhaLimpa));
+//        String senhaLimpa = "admin123";
+//        System.out.println("Senha limpa: " + senhaLimpa + " -> " + "Senha criptografada: " + encoder.encode(senhaLimpa));
     }
 }

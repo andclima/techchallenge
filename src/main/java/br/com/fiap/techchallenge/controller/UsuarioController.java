@@ -46,6 +46,11 @@ public class UsuarioController {
         if (id == null || id.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        try {
+            Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         var usuario = svc.buscarUsuarioPorId(Long.parseLong(id));
         if (usuario.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
