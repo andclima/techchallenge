@@ -1,0 +1,814 @@
+{
+	"info": {
+		"_postman_id": "9b784569-e9e0-43e5-8f67-040c4b55b129",
+		"name": "Techallenge - Fase 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33275127"
+	},
+	"item": [
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "listar-usuários",
+					"item": [
+						{
+							"name": "listar-usuários",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar-usuários-nome",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios?q=fulano",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "fulano"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "listar-usuários-nome-inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios?q=sicranio",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									],
+									"query": [
+										{
+											"key": "q",
+											"value": "sicranio"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "usuário-id",
+					"item": [
+						{
+							"name": "usuário-id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "usuário-id-inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios/1111",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios",
+										"1111"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "excluir-usuário",
+					"item": [
+						{
+							"name": "excluir-usuário",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "excluir-usuário-inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios/1111",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios",
+										"1111"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "criar-usuário",
+					"item": [
+						{
+							"name": "criar-usuário",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"fulano\",\r\n    \"email\":\"fulano@gmail.com\",\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"fulano123\",\r\n    \"endereco\":\"rua do fulano\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "criar-usuário-username-repetido",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODUxNDU1LCJpYXQiOjE3NTI4NTExNTV9.d7QngpwfLSpXJesvDfC-KYP4iE7Lc2Whgq3bpkVxWKxFac6lS1976G7DK_lxa2i5ZqX8GSXqZgX546z0FSRntJ0uWMQ9EN0Bbaje6Md5zQmyPuMNqMLpZwiZdV2TM14pnMKgWOjDaF0JqGH86w6EItIOF25CD42GL4sXK78f1F5RIiH0wkMP0sQS7DkkZY06A1nzINDDNw2CODpH0110s1UADiyQzxhIwZZQQtcuHGChFIq2aTEiUACqysENKSmbQvdwLPlUwaRrzwDGlaKUDQfUiD1cQe4r3LAHMUbhicA6Ojz69FflHsaPu-jTmhjYzVV3xe-cABDL6fn_hyxX4w",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"lano\",\r\n    \"email\":\"lano@gmail.com\",\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"lano123\",\r\n    \"endereco\":\"rua do lano\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "criar-usuário-sem-senha",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODUxNDU1LCJpYXQiOjE3NTI4NTExNTV9.d7QngpwfLSpXJesvDfC-KYP4iE7Lc2Whgq3bpkVxWKxFac6lS1976G7DK_lxa2i5ZqX8GSXqZgX546z0FSRntJ0uWMQ9EN0Bbaje6Md5zQmyPuMNqMLpZwiZdV2TM14pnMKgWOjDaF0JqGH86w6EItIOF25CD42GL4sXK78f1F5RIiH0wkMP0sQS7DkkZY06A1nzINDDNw2CODpH0110s1UADiyQzxhIwZZQQtcuHGChFIq2aTEiUACqysENKSmbQvdwLPlUwaRrzwDGlaKUDQfUiD1cQe4r3LAHMUbhicA6Ojz69FflHsaPu-jTmhjYzVV3xe-cABDL6fn_hyxX4w",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"fulano\",\r\n    \"email\":\"fulano@gmail.com\",\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"\",\r\n    \"endereco\":\"rua do fulano\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "criar-usuário-sem-username",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODUxNDU1LCJpYXQiOjE3NTI4NTExNTV9.d7QngpwfLSpXJesvDfC-KYP4iE7Lc2Whgq3bpkVxWKxFac6lS1976G7DK_lxa2i5ZqX8GSXqZgX546z0FSRntJ0uWMQ9EN0Bbaje6Md5zQmyPuMNqMLpZwiZdV2TM14pnMKgWOjDaF0JqGH86w6EItIOF25CD42GL4sXK78f1F5RIiH0wkMP0sQS7DkkZY06A1nzINDDNw2CODpH0110s1UADiyQzxhIwZZQQtcuHGChFIq2aTEiUACqysENKSmbQvdwLPlUwaRrzwDGlaKUDQfUiD1cQe4r3LAHMUbhicA6Ojz69FflHsaPu-jTmhjYzVV3xe-cABDL6fn_hyxX4w",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"fulano\",\r\n    \"email\":\"fulano@gmail.com\",\r\n    \"username\":\"\",\r\n    \"password\":\"fulano123\",\r\n    \"endereco\":\"rua do fulano\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "alterar-usuário",
+					"item": [
+						{
+							"name": "alterar-usuário",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":2,\r\n    \"nome\":\"fulano\",\r\n    \"email\":\"fulano@gmail.com\",\r\n    \"endereco\":\"rua do fulano de tal\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "alterar-usuário-inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":124,\r\n    \"nome\":\"fulano\",\r\n    \"email\":\"fulano@gmail.com\",\r\n    \"endereco\":\"rua do fulano de tal\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "alterar-usuário-sem-id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODQ5OTUzLCJpYXQiOjE3NTI4NDk2NTN9.f2El149rEoay6gEgcsquclOiHkBnbMV2pQk9nn9CARLC5RHPSGgmML0VgVRn0cpbdyg8Xvf2QHfLLdeN_KOouGGP2Tu5dNyO8wWOgBczzooALxePgdEykN5Pew1WApQCBh3WOt3cIEuaFK8ISuh7eGqpGDS5XP_jH-iTkBX3IbetSoFnIzv07A2f8SwJNzJXAh4tqCMMiIoNI3PXlDcfaYfv-B6bKx1Rw7hphtqRertOfFtjzLXxgyoypGPJaoJrKiamox-C424O0zUmQLJxwsGZguDm34vtnomngYnZ1adwCkaUlRXV6IfbTJJ61ZYQYejygAO7H5o8m4oCNzEZGg",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\":\"fulano\",\r\n    \"email\":\"fulano@gmail.com\",\r\n    \"endereco\":\"rua do fulano de tal\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/usuarios",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "mudar-senha",
+					"item": [
+						{
+							"name": "mudar-senha",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODUxNDU1LCJpYXQiOjE3NTI4NTExNTV9.d7QngpwfLSpXJesvDfC-KYP4iE7Lc2Whgq3bpkVxWKxFac6lS1976G7DK_lxa2i5ZqX8GSXqZgX546z0FSRntJ0uWMQ9EN0Bbaje6Md5zQmyPuMNqMLpZwiZdV2TM14pnMKgWOjDaF0JqGH86w6EItIOF25CD42GL4sXK78f1F5RIiH0wkMP0sQS7DkkZY06A1nzINDDNw2CODpH0110s1UADiyQzxhIwZZQQtcuHGChFIq2aTEiUACqysENKSmbQvdwLPlUwaRrzwDGlaKUDQfUiD1cQe4r3LAHMUbhicA6Ojz69FflHsaPu-jTmhjYzVV3xe-cABDL6fn_hyxX4w",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"fulano123\",\r\n    \"newPassword\":\"123fulan\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/change-password",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "mudar-senha-username-inexistente",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODUwMzU4LCJpYXQiOjE3NTI4NTAwNTh9.E8BQhxtiNcJ6Yl4u7NURajQCutD-Enzmzro97Z9y5Cc6m5zYMSxRyAG-nU5PeZJ3LshAeKJdK4iQQhgSvwn2WBlGHrYXGV7uvW3MeLsqiGK35tkvWjJzes_a-DbTOGzYgM6QIaB76A2ikPLoOSxBgF_qZ8XX5gBn1h5aeBqW3OpqzbLgD7cEsSYzcmSkkCCM62AP3ND_wuCQIT5Q4Y-VsO4BonrGmzGpE46Q036dD-3FZd4mJ4eJWpPe9ro7p6Ru8Kcum17uGTpPs0fLFcMU1pIz6DMi7fmcG7Nr-33KqbcebXb6T7a-vhWyptHe5Aa8oHqBp6C_hBnrnJI_zU_TUQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"fulanooooooooo\",\r\n    \"password\":\"fulano123\",\r\n    \"newPassord\":\"123fulan\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/change-password",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "mudar-senha-password-incorreto",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJici5jb20uZmlhcC50ZWNoY2hhbGxlbmdlIiwic3ViIjoiZnVsYW5vX3NpbHZhIiwiZXhwIjoxNzUyODUwMzU4LCJpYXQiOjE3NTI4NTAwNTh9.E8BQhxtiNcJ6Yl4u7NURajQCutD-Enzmzro97Z9y5Cc6m5zYMSxRyAG-nU5PeZJ3LshAeKJdK4iQQhgSvwn2WBlGHrYXGV7uvW3MeLsqiGK35tkvWjJzes_a-DbTOGzYgM6QIaB76A2ikPLoOSxBgF_qZ8XX5gBn1h5aeBqW3OpqzbLgD7cEsSYzcmSkkCCM62AP3ND_wuCQIT5Q4Y-VsO4BonrGmzGpE46Q036dD-3FZd4mJ4eJWpPe9ro7p6Ru8Kcum17uGTpPs0fLFcMU1pIz6DMi7fmcG7Nr-33KqbcebXb6T7a-vhWyptHe5Aa8oHqBp6C_hBnrnJI_zU_TUQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"fula1\",\r\n    \"newPassord\":\"123fulan\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/change-password",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "autenticação",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"123fulan\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/auth",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "autenticação-senha-incorreta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"fulano_silva\",\r\n    \"password\":\"fulano1234567890\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/auth",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "autenticação-username-incorreto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"fulanosilva1234567889\",\r\n    \"password\":\"fulano123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/auth",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
