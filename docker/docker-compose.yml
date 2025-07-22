@@ -9,7 +9,7 @@ services:
       MARIADB_PASSWORD: 'noTnZQMVikRVQ6XKSJHgVaRO'
       MARIADB_ROOT_PASSWORD: 'senha_super_segura_para_o_root'
     ports:
-      - "3386:3386"
+      - "3386:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./mariadb/conf/my.cnf:/etc/mysql/conf.d/my.cnf
@@ -28,7 +28,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3386/techchallenge?useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/techchallenge?useSSL=false
       SPRING_DATASOURCE_USERNAME: 'admin'
       SPRING_DATASOURCE_PASSWORD: 'noTnZQMVikRVQ6XKSJHgVaRO'
       SPRING_JPA_HIBERNATE_DDL_AUTO: 'update'
