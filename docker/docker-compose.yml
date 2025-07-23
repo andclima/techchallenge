@@ -16,16 +16,16 @@ services:
       - ./mariadb/conf:/etc/mysql
 
 
-#  app:
-#    depends_on:
-#      - db
-#    # build: ./tomcat-build
-#    image: tomcat:9-jre8
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ./tomcat/webapps/:/usr/local/tomcat/webapps/
-#      - ./tomcat/logs/:/usr/local/tomcat/logs/
+  # app:
+  #  depends_on:
+  #    - db
+  #  build: ./tomcat-build
+  #  image: tomcat:9-jre8
+  #  ports:
+  #    - "8080:8080"
+  #  volumes:
+  #    - ./tomcat/webapps/:/usr/local/tomcat/webapps/
+  #    - ./tomcat/logs/:/usr/local/tomcat/logs/
 
 #networks:
 #  default:

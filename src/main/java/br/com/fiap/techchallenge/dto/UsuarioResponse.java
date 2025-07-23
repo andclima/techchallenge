@@ -1,5 +1,5 @@
 package br.com.fiap.techchallenge.dto;
 
-public record UsuarioResponse(Long id, String nome, String email, String username, String endereco) {
+public record UsuarioResponse(Long id, String nome, String email, String username, String endereco, String nomeDoRestaurante, String numeroFidelidade) {
 
 }
