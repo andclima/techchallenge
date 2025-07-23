@@ -35,7 +35,6 @@ Todos os usuários herdam da superclasse `Usuario`, que possui os campos comuns:
 
 ### 📌 Criar Usuário
 
-```http
 POST /usuarios
 🔸 Corpo da Requisição
 
