@@ -4,10 +4,10 @@ services:
     container_name: techchallenge-db
     restart: always
     environment:
-      MARIADB_DATABASE: 'techchallenge'
-      MARIADB_USER: 'admin'
-      MARIADB_PASSWORD: 'noTnZQMVikRVQ6XKSJHgVaRO'
-      MARIADB_ROOT_PASSWORD: 'senha_super_segura_para_o_root'
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
     ports:
       - "3386:3306"
     volumes:
