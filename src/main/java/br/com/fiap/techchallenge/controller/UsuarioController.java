@@ -1,9 +1,11 @@
 package br.com.fiap.techchallenge.controller;
 
+import br.com.fiap.techchallenge.dto.ClienteResponse;
 import br.com.fiap.techchallenge.dto.CreateUsuarioRequest;
+import br.com.fiap.techchallenge.dto.DonoRestauranteResponse;
 import br.com.fiap.techchallenge.dto.PasswordRequest;
 import br.com.fiap.techchallenge.dto.UpdateUsuarioRequest;
-import br.com.fiap.techchallenge.dto.UsuarioResponse;
+import br.com.fiap.techchallenge.dto.UsuarioResponseBase;
 import br.com.fiap.techchallenge.model.Cliente;
 import br.com.fiap.techchallenge.model.DonoRestaurante;
 import br.com.fiap.techchallenge.model.TipoUsuario;
@@ -28,54 +30,72 @@ public class UsuarioController {
     }
 
     @GetMapping("/usuarios")
-    public ResponseEntity<List<UsuarioResponse>> listByNome(
-            @RequestParam(name = "q", required = false, defaultValue = "")  String nome) {
-        if (nome == null || nome.isEmpty()) {
-            nome = "";
-        }
-        // Convert List<Usuario> to List<UsuarioResponse>
-        List<UsuarioResponse> lista = svc.listarUsuarioPorNome(nome).stream()
-                .map(usuario -> new UsuarioResponse(usuario.getId(),
-                        usuario.getNome(),
-                        usuario.getEmail(),
-                        usuario.getUsername(),
-                        usuario.getEndereco(),
-                        usuario instanceof DonoRestaurante dono ? dono.getNomeDoRestaurante() : null,
-                        usuario instanceof Cliente c ? c.getNumeroFidelidade() : null))
-                .toList();
+    public ResponseEntity<List<? extends UsuarioResponseBase>> listByNome(
+            @RequestParam(name = "q", required = false, defaultValue = "") String nome) {
+
+        List<? extends UsuarioResponseBase> lista = svc.listarUsuarioPorNome(nome).stream()
+            .map(usuario -> {
+                if (usuario instanceof DonoRestaurante dono) {
+                    return new DonoRestauranteResponse(
+                        dono.getId(),
+                        dono.getNome(),
+                        dono.getEmail(),
+                        dono.getUsername(),
+                        dono.getEndereco(),
+                        dono.getNomeDoRestaurante()
+                    );
+                } else if (usuario instanceof Cliente cliente) {
+                    return new ClienteResponse(
+                        cliente.getId(),
+                        cliente.getNome(),
+                        cliente.getEmail(),
+                        cliente.getUsername(),
+                        cliente.getEndereco(),
+                        cliente.getNumeroFidelidade()
+                    );
+                }
+                return null;
+            })
+            .toList();
+
         return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<UsuarioResponse> get(@PathVariable("id") String id) {
-        if (id == null || id.isEmpty()) return ResponseEntity.badRequest().build();
+    public ResponseEntity<UsuarioResponseBase> get(@PathVariable("id") Long id) {
+        var usuarioOpt = svc.buscarUsuarioPorId(id);
+        if (usuarioOpt.isEmpty()) return ResponseEntity.notFound().build();
 
-        try {
-            Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().build();
+        Usuario usuario = usuarioOpt.get();
+        UsuarioResponseBase response;
+
+        if (usuario instanceof DonoRestaurante dono) {
+            response = new DonoRestauranteResponse(
+                dono.getId(),
+                dono.getNome(),
+                dono.getEmail(),
+                dono.getUsername(),
+                dono.getEndereco(),
+                dono.getNomeDoRestaurante()
+            );
+        } else if (usuario instanceof Cliente cliente) {
+            response = new ClienteResponse(
+                cliente.getId(),
+                cliente.getNome(),
+                cliente.getEmail(),
+                cliente.getUsername(),
+                cliente.getEndereco(),
+                cliente.getNumeroFidelidade()
+            );
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        var opt = svc.buscarUsuarioPorId(Long.parseLong(id));
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
-
-        Usuario u = opt.get();
-
-        UsuarioResponse response = new UsuarioResponse(
-                u.getId(),
-                u.getNome(),
-                u.getEmail(),
-                u.getUsername(),
-                u.getEndereco(),
-                u instanceof DonoRestaurante d ? d.getNomeDoRestaurante() : null,
-                u instanceof Cliente c ? c.getNumeroFidelidade() : null
-        );
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/usuarios/tipo")
-    public ResponseEntity<List<UsuarioResponse>> listarPorTipo(
+    public ResponseEntity<List<? extends UsuarioResponseBase>> listarPorTipo(
             @RequestParam(name = "tipo") String tipoStr) {
 
         TipoUsuario tipo = TipoUsuario.from(tipoStr);
@@ -84,23 +104,37 @@ public class UsuarioController {
         }
 
         List<Usuario> usuarios = svc.listarPorTipo(tipo);
-        List<UsuarioResponse> lista = usuarios.stream()
-            .map(usuario -> new UsuarioResponse(
-                usuario.getId(),
-                usuario.getNome(),
-                usuario.getEmail(),
-                usuario.getUsername(),
-                usuario.getEndereco(),
-                usuario instanceof DonoRestaurante dono ? dono.getNomeDoRestaurante() : null,
-                usuario instanceof Cliente c ? c.getNumeroFidelidade() : null
-            ))
+
+        List<? extends UsuarioResponseBase> lista = usuarios.stream()
+            .map(usuario -> {
+                if (usuario instanceof DonoRestaurante dono) {
+                    return new DonoRestauranteResponse(
+                        dono.getId(),
+                        dono.getNome(),
+                        dono.getEmail(),
+                        dono.getUsername(),
+                        dono.getEndereco(),
+                        dono.getNomeDoRestaurante()
+                    );
+                } else if (usuario instanceof Cliente cliente) {
+                    return new ClienteResponse(
+                        cliente.getId(),
+                        cliente.getNome(),
+                        cliente.getEmail(),
+                        cliente.getUsername(),
+                        cliente.getEndereco(),
+                        cliente.getNumeroFidelidade()
+                    );
+                }
+                return null;
+            })
             .toList();
 
         return ResponseEntity.ok(lista);
     }
 
     @PostMapping("/usuarios")
-    public ResponseEntity<UsuarioResponse> create(@RequestBody CreateUsuarioRequest dto) {
+    public ResponseEntity<? extends UsuarioResponseBase> create(@RequestBody CreateUsuarioRequest dto) {
         if (dto.username() == null || dto.username().isEmpty()
                 || dto.password() == null || dto.password().isEmpty()
                 || dto.tipo() == null || dto.tipo().isEmpty()) {
@@ -144,24 +178,23 @@ public class UsuarioController {
 
         Usuario salvo = svc.criarUsuario(usuario);
 
-        String nomeRestaurante = (salvo instanceof DonoRestaurante d) ? d.getNomeDoRestaurante() : null;
-        String numeroFidelidade = (salvo instanceof Cliente c) ? c.getNumeroFidelidade() : null;
+        if (salvo instanceof DonoRestaurante d) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new DonoRestauranteResponse(
+                            d.getId(), d.getNome(), d.getEmail(), d.getUsername(),
+                            d.getEndereco(), d.getNomeDoRestaurante()));
+        } else if (salvo instanceof Cliente c) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ClienteResponse(
+                            c.getId(), c.getNome(), c.getEmail(), c.getUsername(),
+                            c.getEndereco(), c.getNumeroFidelidade()));
+        }
 
-        UsuarioResponse response = new UsuarioResponse(
-                salvo.getId(),
-                salvo.getNome(),
-                salvo.getEmail(),
-                salvo.getUsername(),
-                salvo.getEndereco(),
-                nomeRestaurante,
-                numeroFidelidade
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @PutMapping("/usuarios")
-    public ResponseEntity<Void> update(@RequestBody UpdateUsuarioRequest dto) {
+    public ResponseEntity<? extends UsuarioResponseBase> update(@RequestBody UpdateUsuarioRequest dto) {
         if (dto.id() == null) return ResponseEntity.badRequest().build();
 
         var existenteOpt = svc.buscarUsuarioPorId(dto.id());
@@ -181,25 +214,32 @@ public class UsuarioController {
         }
 
         if (usuario instanceof Cliente cliente) {
-            // Verifica se está tentando alterar para um número de fidelidade já usado
             if (dto.numeroFidelidade() != null &&
-                !dto.numeroFidelidade().equals(cliente.getNumeroFidelidade())) {
-
+                    !dto.numeroFidelidade().equals(cliente.getNumeroFidelidade())) {
                 var outro = svc.buscarPorNumeroFidelidade(dto.numeroFidelidade());
                 if (outro.isPresent() && !outro.get().getId().equals(cliente.getId())) {
                     return ResponseEntity.status(HttpStatus.CONFLICT).build();
                 }
-
                 cliente.setNumeroFidelidade(dto.numeroFidelidade());
             }
-
             if (dto.nomeDoRestaurante() != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         }
 
-        svc.atualizarUsuario(usuario);
-        return ResponseEntity.ok().build();
+        Usuario salvo = svc.atualizarUsuario(usuario);
+
+        if (salvo instanceof DonoRestaurante d) {
+            return ResponseEntity.ok(new DonoRestauranteResponse(
+                    d.getId(), d.getNome(), d.getEmail(), d.getUsername(),
+                    d.getEndereco(), d.getNomeDoRestaurante()));
+        } else if (salvo instanceof Cliente c) {
+            return ResponseEntity.ok(new ClienteResponse(
+                    c.getId(), c.getNome(), c.getEmail(), c.getUsername(),
+                    c.getEndereco(), c.getNumeroFidelidade()));
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @DeleteMapping("/usuarios/{id}")

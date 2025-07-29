@@ -17,7 +17,7 @@ services:
     networks:
       - techchallenge-network
 
-<<<<<<< HEAD
+# <<<<<<< HEAD
   # app:
   #  depends_on:
   #    - db
@@ -28,7 +28,7 @@ services:
   #  volumes:
   #    - ./tomcat/webapps/:/usr/local/tomcat/webapps/
   #    - ./tomcat/logs/:/usr/local/tomcat/logs/
-=======
+# =======
   app:
     build:
       context: ..
@@ -46,7 +46,7 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: 'update'
     networks:
       - techchallenge-network
->>>>>>> 0965a76c0880cf3cbe6bd2f2b6d235ab52e0284f
+# >>>>>>> 0965a76c0880cf3cbe6bd2f2b6d235ab52e0284f
 
 networks:
   techchallenge-network:
