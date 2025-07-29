@@ -4,10 +4,10 @@ services:
     container_name: techchallenge-db
     restart: always
     environment:
-      MARIADB_DATABASE: 'techchallenge'
-      MARIADB_USER: 'admin'
-      MARIADB_PASSWORD: 'noTnZQMVikRVQ6XKSJHgVaRO'
-      MARIADB_ROOT_PASSWORD: 'senha_super_segura_para_o_root'
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
     ports:
       - "3386:3306"
     volumes:
@@ -17,7 +17,11 @@ services:
     networks:
       - techchallenge-network
 
+<<<<<<< HEAD
 # <<<<<<< HEAD
+=======
+#<<<<<<< HEAD
+>>>>>>> 058aae6f9f06762d12879c0f93c27b1f6500a1c0
   # app:
   #  depends_on:
   #    - db
@@ -28,7 +32,11 @@ services:
   #  volumes:
   #    - ./tomcat/webapps/:/usr/local/tomcat/webapps/
   #    - ./tomcat/logs/:/usr/local/tomcat/logs/
+<<<<<<< HEAD
 # =======
+=======
+
+>>>>>>> 058aae6f9f06762d12879c0f93c27b1f6500a1c0
   app:
     build:
       context: ..
@@ -41,12 +49,16 @@ services:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/techchallenge?useSSL=false
-      SPRING_DATASOURCE_USERNAME: 'admin'
-      SPRING_DATASOURCE_PASSWORD: 'noTnZQMVikRVQ6XKSJHgVaRO'
-      SPRING_JPA_HIBERNATE_DDL_AUTO: 'update'
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     networks:
       - techchallenge-network
+<<<<<<< HEAD
 # >>>>>>> 0965a76c0880cf3cbe6bd2f2b6d235ab52e0284f
+=======
+#>>>>>>> 0965a76c0880cf3cbe6bd2f2b6d235ab52e0284f
+>>>>>>> 058aae6f9f06762d12879c0f93c27b1f6500a1c0
 
 networks:
   techchallenge-network:

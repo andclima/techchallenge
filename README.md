@@ -31,16 +31,17 @@ Todos os usuários herdam da superclasse `Usuario`, que possui os campos comuns:
 
 ---
 
-## 🛠️ Endpoints
+## 🚀 Endpoints
 
 ### 📌 Criar Usuário
 
-```http
-POST /usuarios
-🔸 Corpo da Requisição
+**POST** `/usuarios`
 
-Para Cliente:
+🔸 **Corpo da Requisição**
 
+#### Para Cliente:
+
+```json
 {
   "nome": "João",
   "email": "joao@email.com",
@@ -50,9 +51,11 @@ Para Cliente:
   "tipo": "cliente",
   "numeroFidelidade": "FID12345"
 }
+```
 
-Para DonoRestaurante:
+#### Para DonoRestaurante:
 
+```json
 {
   "nome": "Maria",
   "email": "maria@email.com",
@@ -62,62 +65,87 @@ Para DonoRestaurante:
   "tipo": "dono",
   "nomeDoRestaurante": "Sabor da Serra"
 }
+```
+
 🔸 Respostas
-201 CREATED com usuário criado
 
-409 CONFLICT se username ou campo exclusivo (numeroFidelidade, nomeDoRestaurante) já existir
+201 CREATED – Usuário criado com sucesso.
 
-400 BAD REQUEST se o tipo for inválido ou campo obrigatório ausente
+409 CONFLICT – username ou campo exclusivo (numeroFidelidade, nomeDoRestaurante) já existente.
+
+400 BAD REQUEST – Tipo inválido ou campo obrigatório ausente.
+
+---
 
 🔍 Buscar Usuários por Nome
-
 GET /usuarios?q=joao
-Retorna lista de usuários com nome contendo q
 
-Inclui campos exclusivos conforme o tipo
+Retorna lista de usuários cujo nome contém a string q.
+
+Inclui campos exclusivos conforme o tipo (numeroFidelidade, nomeDoRestaurante).
+
+---
 
 📌 Buscar por ID
-
 GET /usuarios/{id}
+
+Retorna um usuário pelo ID.
+
+---
+
 ✏️ Atualizar Usuário
 PUT /usuarios
-🔸 Corpo:
+
+🔸 Corpo da Requisição
+
+```json
 {
   "id": 1,
   "nome": "João Atualizado",
   "email": "joao@novo.com",
   "endereco": "Rua Nova",
-  "numeroFidelidade": "FID99999" // apenas para cliente
+  "numeroFidelidade": "FID99999" 
 }
-409 CONFLICT se tentar atualizar numeroFidelidade para um já usado
+```
+🔸 Campo numeroFidelidade deve ser enviado apenas para clientes.
 
-400 BAD REQUEST se cliente tentar alterar nomeDoRestaurante (e vice-versa)
+🔸 Regras de Validação
+
+409 CONFLICT – Ao tentar atualizar numeroFidelidade para um valor já existente.
+
+400 BAD REQUEST – Se um cliente tentar alterar nomeDoRestaurante, ou vice-versa.
+
+---
 
 🔒 Alterar Senha
-
 POST /change-password
+
+🔸 Corpo da Requisição
+
+```json
 {
   "username": "joao123",
   "password": "senhaAntiga",
   "newPassword": "senhaNova"
 }
+```
 
-🧪 Exemplos de Responses
-{
-  "id": 5,
-  "nome": "Maria",
-  "email": "maria@email.com",
-  "username": "maria123",
-  "endereco": "Rua B",
-  "nomeDoRestaurante": "Sabor da Serra",
-  "numeroFidelidade": null
-}
-  
-✅ Boas Práticas Aplicadas
-✅ Princípios SOLID (SRP, OCP, LSP, ISP, DIP)
-✅ DTOs para entrada e saída
-✅ Enum para tipos de usuário
-✅ Herança com @Inheritance(strategy = JOINED)
-✅ Validações condicionais por tipo
-✅ Tratamento de erro 409 para dados únicos
-✅ Separação de responsabilidade (service, controller, model)
+🔸 Respostas
+
+200 OK – Senha alterada com sucesso.
+
+400 BAD REQUEST – Campos inválidos ou senha atual incorreta.
+
+---
+
+## ✅ Boas Práticas Aplicadas
+
+- ✅ Princípios **SOLID** (`SRP`, `OCP`, `LSP`, `ISP`, `DIP`)
+- ✅ Uso de **DTOs** para entrada e saída de dados
+- ✅ Definição de **Enum** para tipos de usuário
+- ✅ Herança utilizando `@Inheritance(strategy = JOINED)`
+- ✅ Validações condicionais com base no tipo do usuário
+- ✅ Tratamento de erro `409 CONFLICT` para campos únicos
+- ✅ Separação clara de responsabilidades entre `service`, `controller` e `model`
+
+
