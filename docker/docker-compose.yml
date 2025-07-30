@@ -13,20 +13,10 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./mariadb/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mariadb/init/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     networks:
       - techchallenge-network
-
-  # app:
-  #  depends_on:
-  #    - db
-  #  build: ./tomcat-build
-  #  image: tomcat:9-jre8
-  #  ports:
-  #    - "8080:8080"
-  #  volumes:
-  #    - ./tomcat/webapps/:/usr/local/tomcat/webapps/
-  #    - ./tomcat/logs/:/usr/local/tomcat/logs/
 
   app:
     build:
