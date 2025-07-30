@@ -1,16 +1,12 @@
 package br.com.fiap.techchallenge.controller;
 
-import br.com.fiap.techchallenge.dto.ClienteResponse;
-import br.com.fiap.techchallenge.dto.CreateUsuarioRequest;
-import br.com.fiap.techchallenge.dto.DonoRestauranteResponse;
-import br.com.fiap.techchallenge.dto.PasswordRequest;
-import br.com.fiap.techchallenge.dto.UpdateUsuarioRequest;
-import br.com.fiap.techchallenge.dto.UsuarioResponseBase;
+import br.com.fiap.techchallenge.dto.*;
 import br.com.fiap.techchallenge.model.Cliente;
 import br.com.fiap.techchallenge.model.DonoRestaurante;
 import br.com.fiap.techchallenge.model.TipoUsuario;
 import br.com.fiap.techchallenge.model.Usuario;
 import br.com.fiap.techchallenge.service.UsuarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,77 +19,53 @@ public class UsuarioController {
 
     private final UsuarioService svc;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
-    public UsuarioController(UsuarioService usuarioService, PasswordEncoder passwordEncoder) {
+    public UsuarioController(UsuarioService usuarioService,
+                             PasswordEncoder passwordEncoder,
+                             ModelMapper modelMapper) {
         this.svc = usuarioService;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
+    // ----------------------- LISTAR POR NOME -----------------------
     @GetMapping("/usuarios")
     public ResponseEntity<List<? extends UsuarioResponseBase>> listByNome(
             @RequestParam(name = "q", required = false, defaultValue = "") String nome) {
 
         List<? extends UsuarioResponseBase> lista = svc.listarUsuarioPorNome(nome).stream()
-            .map(usuario -> {
-                if (usuario instanceof DonoRestaurante dono) {
-                    return new DonoRestauranteResponse(
-                        dono.getId(),
-                        dono.getNome(),
-                        dono.getEmail(),
-                        dono.getUsername(),
-                        dono.getEndereco(),
-                        dono.getNomeDoRestaurante()
-                    );
-                } else if (usuario instanceof Cliente cliente) {
-                    return new ClienteResponse(
-                        cliente.getId(),
-                        cliente.getNome(),
-                        cliente.getEmail(),
-                        cliente.getUsername(),
-                        cliente.getEndereco(),
-                        cliente.getNumeroFidelidade()
-                    );
-                }
-                return null;
-            })
-            .toList();
+                .map(usuario -> {
+                    if (usuario instanceof DonoRestaurante) {
+                        return modelMapper.map(usuario, DonoRestauranteResponse.class);
+                    } else if (usuario instanceof Cliente) {
+                        return modelMapper.map(usuario, ClienteResponse.class);
+                    }
+                    return null;
+                })
+                .toList();
 
         return ResponseEntity.ok(lista);
     }
 
+    // ----------------------- LISTAR POR ID -----------------------
     @GetMapping("/usuarios/{id}")
     public ResponseEntity<UsuarioResponseBase> get(@PathVariable("id") Long id) {
         var usuarioOpt = svc.buscarUsuarioPorId(id);
         if (usuarioOpt.isEmpty()) return ResponseEntity.notFound().build();
 
         Usuario usuario = usuarioOpt.get();
-        UsuarioResponseBase response;
 
-        if (usuario instanceof DonoRestaurante dono) {
-            response = new DonoRestauranteResponse(
-                dono.getId(),
-                dono.getNome(),
-                dono.getEmail(),
-                dono.getUsername(),
-                dono.getEndereco(),
-                dono.getNomeDoRestaurante()
-            );
-        } else if (usuario instanceof Cliente cliente) {
-            response = new ClienteResponse(
-                cliente.getId(),
-                cliente.getNome(),
-                cliente.getEmail(),
-                cliente.getUsername(),
-                cliente.getEndereco(),
-                cliente.getNumeroFidelidade()
-            );
-        } else {
-            return ResponseEntity.notFound().build();
+        if (usuario instanceof DonoRestaurante) {
+            return ResponseEntity.ok(modelMapper.map(usuario, DonoRestauranteResponse.class));
+        } else if (usuario instanceof Cliente) {
+            return ResponseEntity.ok(modelMapper.map(usuario, ClienteResponse.class));
         }
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.notFound().build();
     }
 
+    // ----------------------- LISTAR POR TIPO -----------------------
     @GetMapping("/usuarios/tipo")
     public ResponseEntity<List<? extends UsuarioResponseBase>> listarPorTipo(
             @RequestParam(name = "tipo") String tipoStr) {
@@ -106,33 +78,20 @@ public class UsuarioController {
         List<Usuario> usuarios = svc.listarPorTipo(tipo);
 
         List<? extends UsuarioResponseBase> lista = usuarios.stream()
-            .map(usuario -> {
-                if (usuario instanceof DonoRestaurante dono) {
-                    return new DonoRestauranteResponse(
-                        dono.getId(),
-                        dono.getNome(),
-                        dono.getEmail(),
-                        dono.getUsername(),
-                        dono.getEndereco(),
-                        dono.getNomeDoRestaurante()
-                    );
-                } else if (usuario instanceof Cliente cliente) {
-                    return new ClienteResponse(
-                        cliente.getId(),
-                        cliente.getNome(),
-                        cliente.getEmail(),
-                        cliente.getUsername(),
-                        cliente.getEndereco(),
-                        cliente.getNumeroFidelidade()
-                    );
-                }
-                return null;
-            })
-            .toList();
+                .map(usuario -> {
+                    if (usuario instanceof DonoRestaurante) {
+                        return modelMapper.map(usuario, DonoRestauranteResponse.class);
+                    } else if (usuario instanceof Cliente) {
+                        return modelMapper.map(usuario, ClienteResponse.class);
+                    }
+                    return null;
+                })
+                .toList();
 
         return ResponseEntity.ok(lista);
     }
 
+    // ----------------------- CRIAR USUÁRIO -----------------------
     @PostMapping("/usuarios")
     public ResponseEntity<? extends UsuarioResponseBase> create(@RequestBody CreateUsuarioRequest dto) {
         if (dto.username() == null || dto.username().isEmpty()
@@ -168,31 +127,26 @@ public class UsuarioController {
             if (dto.numeroFidelidade() == null || dto.numeroFidelidade().isBlank()) {
                 return ResponseEntity.badRequest().build();
             }
-
             if (svc.buscarPorNumeroFidelidade(dto.numeroFidelidade()).isPresent()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
-
             cliente.setNumeroFidelidade(dto.numeroFidelidade());
         }
 
         Usuario salvo = svc.criarUsuario(usuario);
 
-        if (salvo instanceof DonoRestaurante d) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new DonoRestauranteResponse(
-                            d.getId(), d.getNome(), d.getEmail(), d.getUsername(),
-                            d.getEndereco(), d.getNomeDoRestaurante()));
-        } else if (salvo instanceof Cliente c) {
+        if (salvo instanceof DonoRestaurante) {
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ClienteResponse(
-                            c.getId(), c.getNome(), c.getEmail(), c.getUsername(),
-                            c.getEndereco(), c.getNumeroFidelidade()));
+                    .body(modelMapper.map(salvo, DonoRestauranteResponse.class));
+        } else if (salvo instanceof Cliente) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(modelMapper.map(salvo, ClienteResponse.class));
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    // ----------------------- ATUALIZAR USUÁRIO -----------------------
     @PutMapping("/usuarios")
     public ResponseEntity<? extends UsuarioResponseBase> update(@RequestBody UpdateUsuarioRequest dto) {
         if (dto.id() == null) return ResponseEntity.badRequest().build();
@@ -229,19 +183,16 @@ public class UsuarioController {
 
         Usuario salvo = svc.atualizarUsuario(usuario);
 
-        if (salvo instanceof DonoRestaurante d) {
-            return ResponseEntity.ok(new DonoRestauranteResponse(
-                    d.getId(), d.getNome(), d.getEmail(), d.getUsername(),
-                    d.getEndereco(), d.getNomeDoRestaurante()));
-        } else if (salvo instanceof Cliente c) {
-            return ResponseEntity.ok(new ClienteResponse(
-                    c.getId(), c.getNome(), c.getEmail(), c.getUsername(),
-                    c.getEndereco(), c.getNumeroFidelidade()));
+        if (salvo instanceof DonoRestaurante) {
+            return ResponseEntity.ok(modelMapper.map(salvo, DonoRestauranteResponse.class));
+        } else if (salvo instanceof Cliente) {
+            return ResponseEntity.ok(modelMapper.map(salvo, ClienteResponse.class));
         }
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    // ----------------------- DELETAR USUÁRIO -----------------------
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         if (id == null || id <= 0) {
@@ -255,6 +206,7 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
+    // ----------------------- ALTERAR SENHA -----------------------
     @PostMapping("/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody PasswordRequest dto) {
         var usuario = svc.buscarUsuarioPorUserame(dto.username());

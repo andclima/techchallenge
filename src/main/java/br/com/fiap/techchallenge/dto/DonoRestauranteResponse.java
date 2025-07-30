@@ -6,5 +6,6 @@ public record DonoRestauranteResponse(
   String email,
   String username,
   String endereco,
-  String nomeDoRestaurante
+  String nomeDoRestaurante,
+  String tipo
 ) implements UsuarioResponseBase {}

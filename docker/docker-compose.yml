@@ -17,11 +17,6 @@ services:
     networks:
       - techchallenge-network
 
-<<<<<<< HEAD
-# <<<<<<< HEAD
-=======
-#<<<<<<< HEAD
->>>>>>> 058aae6f9f06762d12879c0f93c27b1f6500a1c0
   # app:
   #  depends_on:
   #    - db
@@ -32,11 +27,7 @@ services:
   #  volumes:
   #    - ./tomcat/webapps/:/usr/local/tomcat/webapps/
   #    - ./tomcat/logs/:/usr/local/tomcat/logs/
-<<<<<<< HEAD
-# =======
-=======
 
->>>>>>> 058aae6f9f06762d12879c0f93c27b1f6500a1c0
   app:
     build:
       context: ..
@@ -54,11 +45,6 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO}
     networks:
       - techchallenge-network
-<<<<<<< HEAD
-# >>>>>>> 0965a76c0880cf3cbe6bd2f2b6d235ab52e0284f
-=======
-#>>>>>>> 0965a76c0880cf3cbe6bd2f2b6d235ab52e0284f
->>>>>>> 058aae6f9f06762d12879c0f93c27b1f6500a1c0
 
 networks:
   techchallenge-network:

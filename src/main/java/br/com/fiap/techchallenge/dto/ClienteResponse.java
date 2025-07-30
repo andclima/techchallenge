@@ -6,5 +6,6 @@ public record ClienteResponse(
   String email,
   String username,
   String endereco,
-  String numeroFidelidade
+  String numeroFidelidade,
+  String tipo
 ) implements UsuarioResponseBase {}
