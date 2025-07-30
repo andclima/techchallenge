@@ -10,7 +10,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-public class Usuario {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Usuario {
 
     @Id
     @Column(name = "idUsuario")

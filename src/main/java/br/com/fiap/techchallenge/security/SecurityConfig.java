@@ -35,11 +35,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                         .anyRequest().permitAll())
-//                        .requestMatchers("/auth").permitAll()
-//                        .requestMatchers("/change-password").permitAll()
-//                        .requestMatchers("/swagger-ui/index.html").permitAll()
-//                        .anyRequest().authenticated())
+                        .requestMatchers("/auth").permitAll()
+                        .requestMatchers("/change-password").permitAll()
+                        .requestMatchers("/swagger-ui/index.html").permitAll()
+                        .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

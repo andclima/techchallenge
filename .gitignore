@@ -3,8 +3,9 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-/docker/.env
-/docker/mariadb/data
+docker/mariadb/data/**
+mariadb/data
+tomcat/
 
 *.key
 

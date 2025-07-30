@@ -1,9 +1,16 @@
 package br.com.fiap.techchallenge.service;
 
+import br.com.fiap.techchallenge.model.Cliente;
+import br.com.fiap.techchallenge.model.TipoUsuario;
 import br.com.fiap.techchallenge.model.Usuario;
+import br.com.fiap.techchallenge.repository.ClienteRepository;
+import br.com.fiap.techchallenge.repository.DonoRestauranteRepository;
 import br.com.fiap.techchallenge.repository.UsuarioRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,4 +49,21 @@ public class UsuarioService {
      public List<Usuario> listarUsuarioPorNome(String nome) {
          return usuarioRepository.findAllByNomeContainingIgnoreCase(nome);
      }
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private DonoRestauranteRepository donoRepository;
+
+    public List<Usuario> listarPorTipo(TipoUsuario tipo) {
+        return switch (tipo) {
+            case CLIENTE -> new ArrayList<>(clienteRepository.findAll());
+            case DONO -> new ArrayList<>(donoRepository.findAll());
+        };
+    }
+
+    public Optional<Cliente> buscarPorNumeroFidelidade(String numero) {
+        return clienteRepository.findByNumeroFidelidade(numero);
+    }
 }

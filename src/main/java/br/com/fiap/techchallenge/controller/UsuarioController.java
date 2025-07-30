@@ -1,11 +1,12 @@
 package br.com.fiap.techchallenge.controller;
 
-import br.com.fiap.techchallenge.dto.CreateUsuarioRequest;
-import br.com.fiap.techchallenge.dto.PasswordRequest;
-import br.com.fiap.techchallenge.dto.UpdateUsuarioRequest;
-import br.com.fiap.techchallenge.dto.UsuarioResponse;
+import br.com.fiap.techchallenge.dto.*;
+import br.com.fiap.techchallenge.model.Cliente;
+import br.com.fiap.techchallenge.model.DonoRestaurante;
+import br.com.fiap.techchallenge.model.TipoUsuario;
 import br.com.fiap.techchallenge.model.Usuario;
 import br.com.fiap.techchallenge.service.UsuarioService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,102 +19,180 @@ public class UsuarioController {
 
     private final UsuarioService svc;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
-    public UsuarioController(UsuarioService usuarioService, PasswordEncoder passwordEncoder) {
+    public UsuarioController(UsuarioService usuarioService,
+                             PasswordEncoder passwordEncoder,
+                             ModelMapper modelMapper) {
         this.svc = usuarioService;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
+    // ----------------------- LISTAR POR NOME -----------------------
     @GetMapping("/usuarios")
-    public ResponseEntity<List<UsuarioResponse>> listByNome(
-            @RequestParam(name = "q", required = false, defaultValue = "")  String nome) {
-        if (nome == null || nome.isEmpty()) {
-            nome = "";
-        }
-        // Convert List<Usuario> to List<UsuarioResponse>
-        List<UsuarioResponse> lista = svc.listarUsuarioPorNome(nome).stream()
-                .map(usuario -> new UsuarioResponse(usuario.getId(),
-                        usuario.getNome(),
-                        usuario.getEmail(),
-                        usuario.getUsername(),
-                        usuario.getEndereco()))
+    public ResponseEntity<List<? extends UsuarioResponseBase>> listByNome(
+            @RequestParam(name = "q", required = false, defaultValue = "") String nome) {
+
+        List<? extends UsuarioResponseBase> lista = svc.listarUsuarioPorNome(nome).stream()
+                .map(usuario -> {
+                    if (usuario instanceof DonoRestaurante) {
+                        return modelMapper.map(usuario, DonoRestauranteResponse.class);
+                    } else if (usuario instanceof Cliente) {
+                        return modelMapper.map(usuario, ClienteResponse.class);
+                    }
+                    return null;
+                })
                 .toList();
+
         return ResponseEntity.ok(lista);
     }
 
+    // ----------------------- LISTAR POR ID -----------------------
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<UsuarioResponse> get(@PathVariable("id") String id) {
-        if (id == null || id.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<UsuarioResponseBase> get(@PathVariable("id") Long id) {
+        var usuarioOpt = svc.buscarUsuarioPorId(id);
+        if (usuarioOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        Usuario usuario = usuarioOpt.get();
+
+        if (usuario instanceof DonoRestaurante) {
+            return ResponseEntity.ok(modelMapper.map(usuario, DonoRestauranteResponse.class));
+        } else if (usuario instanceof Cliente) {
+            return ResponseEntity.ok(modelMapper.map(usuario, ClienteResponse.class));
         }
-        try {
-            Long.parseLong(id);
-        } catch (NumberFormatException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        var usuario = svc.buscarUsuarioPorId(Long.parseLong(id));
-        if (usuario.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        var response = new UsuarioResponse(usuario.get().getId(),
-                usuario.get().getNome(),
-                usuario.get().getEmail(),
-                usuario.get().getUsername(),
-                usuario.get().getEndereco());
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.notFound().build();
     }
 
+    // ----------------------- LISTAR POR TIPO -----------------------
+    @GetMapping("/usuarios/tipo")
+    public ResponseEntity<List<? extends UsuarioResponseBase>> listarPorTipo(
+            @RequestParam(name = "tipo") String tipoStr) {
+
+        TipoUsuario tipo = TipoUsuario.from(tipoStr);
+        if (tipo == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Usuario> usuarios = svc.listarPorTipo(tipo);
+
+        List<? extends UsuarioResponseBase> lista = usuarios.stream()
+                .map(usuario -> {
+                    if (usuario instanceof DonoRestaurante) {
+                        return modelMapper.map(usuario, DonoRestauranteResponse.class);
+                    } else if (usuario instanceof Cliente) {
+                        return modelMapper.map(usuario, ClienteResponse.class);
+                    }
+                    return null;
+                })
+                .toList();
+
+        return ResponseEntity.ok(lista);
+    }
+
+    // ----------------------- CRIAR USUÁRIO -----------------------
     @PostMapping("/usuarios")
-    public ResponseEntity<UsuarioResponse> create(@RequestBody CreateUsuarioRequest dto) {
-        // Username obrigatorio
-        if (dto.username() == null || dto.username().isEmpty()) {
+    public ResponseEntity<? extends UsuarioResponseBase> create(@RequestBody CreateUsuarioRequest dto) {
+        if (dto.username() == null || dto.username().isEmpty()
+                || dto.password() == null || dto.password().isEmpty()
+                || dto.tipo() == null || dto.tipo().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        // Password obrigatorio
-        if (dto.password() == null || dto.password().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        // Verifica se já existe um usuário com o mesmo username
-        var existente = svc.buscarUsuarioPorUserame(dto.username());
-        if (existente.isPresent()) {
+        if (svc.buscarUsuarioPorUserame(dto.username()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        String novaSenha = passwordEncoder.encode(dto.password());
-        Usuario usuario = new Usuario();
+        TipoUsuario tipo = TipoUsuario.from(dto.tipo());
+        if (tipo == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        Usuario usuario = tipo.criar();
         usuario.setNome(dto.nome());
         usuario.setEmail(dto.email());
         usuario.setUsername(dto.username());
-        usuario.setPassword(novaSenha);
+        usuario.setPassword(passwordEncoder.encode(dto.password()));
         usuario.setEndereco(dto.endereco());
-        Usuario novo = svc.criarUsuario(usuario);
-        var response = new UsuarioResponse(novo.getId(),
-                novo.getNome(),
-                novo.getEmail(),
-                novo.getUsername(),
-                novo.getEndereco());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        if (usuario instanceof DonoRestaurante dono) {
+            if (dto.nomeDoRestaurante() == null || dto.nomeDoRestaurante().isBlank()) {
+                return ResponseEntity.badRequest().build();
+            }
+            dono.setNomeDoRestaurante(dto.nomeDoRestaurante());
+        }
+
+        if (usuario instanceof Cliente cliente) {
+            if (dto.numeroFidelidade() == null || dto.numeroFidelidade().isBlank()) {
+                return ResponseEntity.badRequest().build();
+            }
+            if (svc.buscarPorNumeroFidelidade(dto.numeroFidelidade()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+            cliente.setNumeroFidelidade(dto.numeroFidelidade());
+        }
+
+        Usuario salvo = svc.criarUsuario(usuario);
+
+        if (salvo instanceof DonoRestaurante) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(modelMapper.map(salvo, DonoRestauranteResponse.class));
+        } else if (salvo instanceof Cliente) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(modelMapper.map(salvo, ClienteResponse.class));
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    // ----------------------- ATUALIZAR USUÁRIO -----------------------
     @PutMapping("/usuarios")
-    public ResponseEntity<Void> update(@RequestBody UpdateUsuarioRequest dto) {
-        if (dto.id() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        var existente = svc.buscarUsuarioPorId(dto.id());
-        if (existente.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Usuario usuario = existente.get();
+    public ResponseEntity<? extends UsuarioResponseBase> update(@RequestBody UpdateUsuarioRequest dto) {
+        if (dto.id() == null) return ResponseEntity.badRequest().build();
+
+        var existenteOpt = svc.buscarUsuarioPorId(dto.id());
+        if (existenteOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        Usuario usuario = existenteOpt.get();
+
         usuario.setNome(dto.nome());
         usuario.setEmail(dto.email());
         usuario.setEndereco(dto.endereco());
-        svc.atualizarUsuario(usuario);
-        return ResponseEntity.ok().build();
+
+        if (usuario instanceof DonoRestaurante dono) {
+            dono.setNomeDoRestaurante(dto.nomeDoRestaurante());
+            if (dto.numeroFidelidade() != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        }
+
+        if (usuario instanceof Cliente cliente) {
+            if (dto.numeroFidelidade() != null &&
+                    !dto.numeroFidelidade().equals(cliente.getNumeroFidelidade())) {
+                var outro = svc.buscarPorNumeroFidelidade(dto.numeroFidelidade());
+                if (outro.isPresent() && !outro.get().getId().equals(cliente.getId())) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                }
+                cliente.setNumeroFidelidade(dto.numeroFidelidade());
+            }
+            if (dto.nomeDoRestaurante() != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        }
+
+        Usuario salvo = svc.atualizarUsuario(usuario);
+
+        if (salvo instanceof DonoRestaurante) {
+            return ResponseEntity.ok(modelMapper.map(salvo, DonoRestauranteResponse.class));
+        } else if (salvo instanceof Cliente) {
+            return ResponseEntity.ok(modelMapper.map(salvo, ClienteResponse.class));
+        }
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    // ----------------------- DELETAR USUÁRIO -----------------------
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         if (id == null || id <= 0) {
@@ -127,6 +206,7 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
+    // ----------------------- ALTERAR SENHA -----------------------
     @PostMapping("/change-password")
     public ResponseEntity<Void> changePassword(@RequestBody PasswordRequest dto) {
         var usuario = svc.buscarUsuarioPorUserame(dto.username());
