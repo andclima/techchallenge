@@ -1,4 +1,11 @@
 package br.com.fiap.techchallenge.dto;
 
-public record LoginRequest(String username, String password) {
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginRequest(
+        @NotBlank(message = "O nome de usuário não pode ser vazio")
+        String username,
+
+        @NotBlank(message = "A senha não pode ser vazia")
+        String password
+) {}

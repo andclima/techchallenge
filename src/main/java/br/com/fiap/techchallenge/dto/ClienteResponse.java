@@ -8,4 +8,9 @@ public record ClienteResponse(
   String endereco,
   String numeroFidelidade,
   String tipo
-) implements UsuarioResponseBase {}
+) implements UsuarioResponseBase {
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+}
