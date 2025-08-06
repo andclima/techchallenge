@@ -11,6 +11,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name="usuario")
 public abstract class Usuario {
 
     @Id
