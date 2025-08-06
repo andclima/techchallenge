@@ -8,4 +8,9 @@ public record DonoRestauranteResponse(
   String endereco,
   String nomeDoRestaurante,
   String tipo
-) implements UsuarioResponseBase {}
+) implements UsuarioResponseBase {
+    @Override
+    public Long getId() {
+        return this.id;
+    }
+}
