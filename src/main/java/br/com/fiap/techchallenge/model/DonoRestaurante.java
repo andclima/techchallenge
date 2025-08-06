@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name="donorestaurante")
 public class DonoRestaurante extends Usuario {
 
   @Id
