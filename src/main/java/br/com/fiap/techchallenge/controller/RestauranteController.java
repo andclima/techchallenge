@@ -35,4 +35,9 @@ public class RestauranteController {
         svc.editarRestaurante(request);
         return ResponseEntity.ok("Restaurante editado com sucesso");
     }
+    @DeleteMapping("/restaurante/{id}")
+    public ResponseEntity deleteRestaurante(@PathVariable Long id){
+        svc.excluirRestaurante(id);
+        return ResponseEntity.noContent().build();
+    }
 }

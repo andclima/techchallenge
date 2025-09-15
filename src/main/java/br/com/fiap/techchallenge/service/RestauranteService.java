@@ -62,6 +62,11 @@ public class RestauranteService {
 
         return restauranteRepository.save(restaurante);
     }
+    public void excluirRestaurante(Long id){
+        Restaurante restaurante = restauranteRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Restaurante não encontrado"));
+        restauranteRepository.deleteById(id);
+    }
     private List<RestauranteResponse> restauranteResponseMethod(List<Restaurante> restaurantes){
         List<RestauranteResponse> responseList = restaurantes.stream().map(restaurante -> new RestauranteResponse(
                 restaurante.getId(),
