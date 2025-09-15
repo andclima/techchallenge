@@ -2,6 +2,7 @@ package br.com.fiap.techchallenge.service;
 
 import br.com.fiap.techchallenge.dto.CreateRestauranteRequest;
 import br.com.fiap.techchallenge.dto.RestauranteResponse;
+import br.com.fiap.techchallenge.dto.UpdateRestauranteRequest;
 import br.com.fiap.techchallenge.exception.CredenciaisInvalidasException;
 import br.com.fiap.techchallenge.exception.DadoDuplicadoException;
 import br.com.fiap.techchallenge.exception.RecursoNaoEncontradoException;
@@ -40,6 +41,25 @@ public class RestauranteService {
         TipoCozinha cozinha = tipoCozinhaRepository.findById(request.tipoCozinha())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Tipo de cozinha não encontrado"));
         Restaurante restaurante = new Restaurante(request,cozinha,dono);
+        return restauranteRepository.save(restaurante);
+    }
+    public Restaurante editarRestaurante(UpdateRestauranteRequest request){
+        Restaurante restaurante = restauranteRepository.findById(request.id())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Restaurante não encontrado"));
+        DonoRestaurante dono = donoRestauranteRepository.findById(request.dono()).
+                orElseThrow(() -> new CredenciaisInvalidasException("Dono de restaurante não encontrado"));
+
+        TipoCozinha cozinha = tipoCozinhaRepository.findById(request.tipoCozinha())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tipo de cozinha não encontrado"));
+
+        restaurante.setNome(request.nomeRestaurante());
+        restaurante.setEndereco(request.endereco());
+        restaurante.setCep(request.cep());
+        restaurante.setTipoCozinha(cozinha);
+        restaurante.setDono(dono);
+        restaurante.setHoraFuncionamento(request.horaAbertura(),request.horaFechamento());
+        restaurante.setContato(request.contato());
+
         return restauranteRepository.save(restaurante);
     }
     private List<RestauranteResponse> restauranteResponseMethod(List<Restaurante> restaurantes){

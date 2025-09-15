@@ -4,6 +4,8 @@ import br.com.fiap.techchallenge.dto.CreateRestauranteRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalTime;
+
 @Entity
 @Table(name = "restaurante")
 @Getter
@@ -27,7 +29,6 @@ public class Restaurante {
 
     public Restaurante() {
     }
-
     public Restaurante(CreateRestauranteRequest request, TipoCozinha cozinha, DonoRestaurante dono) {
         this.nome = request.nomeRestaurante();
         this.endereco = request.endereco();
@@ -36,5 +37,33 @@ public class Restaurante {
         this.horaFuncionamento = "Das "+ request.horaAbertura() +" até " + request.horaFechamento();
         this.dono = dono;
         this.contato = request.contato();
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public void setTipoCozinha(TipoCozinha tipoCozinha) {
+        this.tipoCozinha = tipoCozinha;
+    }
+
+    public void setHoraFuncionamento(LocalTime horaAbertura, LocalTime horaFechamento) {
+        this.horaFuncionamento = "Das "+ horaAbertura +" até " + horaFechamento;
+    }
+
+    public void setDono(DonoRestaurante dono) {
+        this.dono = dono;
+    }
+
+    public void setContato(String contato) {
+        this.contato = contato;
     }
 }
