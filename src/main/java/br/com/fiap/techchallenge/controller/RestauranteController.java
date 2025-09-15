@@ -6,14 +6,10 @@ import br.com.fiap.techchallenge.dto.UpdateRestauranteRequest;
 import br.com.fiap.techchallenge.service.RestauranteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 import java.util.List;
 
-@Controller
+@RestController
 public class RestauranteController {
 
     private final RestauranteService svc;

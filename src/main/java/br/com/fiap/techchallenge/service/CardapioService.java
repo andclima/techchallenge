@@ -1,0 +1,81 @@
+package br.com.fiap.techchallenge.service;
+
+import br.com.fiap.techchallenge.dto.CardapioResponse;
+import br.com.fiap.techchallenge.dto.CreateCardapioRequest;
+import br.com.fiap.techchallenge.dto.CreateItemCardapioRequest;
+import br.com.fiap.techchallenge.dto.ItemCardapioResponse;
+import br.com.fiap.techchallenge.exception.DadoDuplicadoException;
+import br.com.fiap.techchallenge.exception.RecursoNaoEncontradoException;
+import br.com.fiap.techchallenge.model.Cardapio;
+import br.com.fiap.techchallenge.model.ItemCardapio;
+import br.com.fiap.techchallenge.model.Restaurante;
+import br.com.fiap.techchallenge.repository.CardapioRepository;
+import br.com.fiap.techchallenge.repository.ItemCardapioRepository;
+import br.com.fiap.techchallenge.repository.RestauranteRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class CardapioService {
+    private final CardapioRepository cardapioRepository;
+    private final ItemCardapioRepository item;
+    private final RestauranteRepository restauranteRepository;
+
+    public CardapioService(CardapioRepository cardapioRepository, ItemCardapioRepository item, RestauranteRepository restauranteRepository) {
+        this.cardapioRepository = cardapioRepository;
+        this.item = item;
+        this.restauranteRepository = restauranteRepository;
+    }
+    public CardapioResponse buscarCardapioDoRestaurante(Long idRestaurante){
+        Cardapio cardapio = cardapioRepository.findByRestauranteId(idRestaurante).
+                orElseThrow(() -> new RecursoNaoEncontradoException("Nenhum cardapio encontrado para esse restaurante"));
+        List<ItemCardapioResponse> itensResponse = cardapio.getItens().stream()
+                .map(item -> new ItemCardapioResponse(item.getId(),
+                        item.getNome(),
+                        item.getDescricao(),
+                        item.getPreco(),
+                        item.getViagemSN(),
+                        item.getCaminhoFoto()
+                )).toList();
+        CardapioResponse response = new CardapioResponse(cardapio.getId(),
+                cardapio.getNome(),
+                cardapio.getRestaurante().getNome(),
+                itensResponse
+        );
+        return response;
+    }
+    public Cardapio criarCardapio(CreateCardapioRequest request){
+        Restaurante restaurante = restauranteRepository.findById(request.idRestaurante()).
+                orElseThrow(() -> new RecursoNaoEncontradoException("O Restaurante não foi encontrado"));
+
+        if (cardapioRepository.findByRestauranteId(request.idRestaurante()).isPresent()){
+            throw new DadoDuplicadoException("O restaurante já tem um cardápio");
+        }
+        Cardapio cardapio = new Cardapio(request.nomeCardapio(),restaurante);
+        return cardapioRepository.save(cardapio);
+    }
+    public ItemCardapio criarItemCardapio(CreateItemCardapioRequest request){
+        Cardapio cardapio = cardapioRepository.findById(request.cardapio()).
+                orElseThrow(() -> new RecursoNaoEncontradoException("Cardapio não encontrado"));
+        ItemCardapio itemCardapio = new ItemCardapio(request,cardapio);
+        return item.save(itemCardapio);
+    }
+    public void deletarCardapio(Long id){
+        var cardapio = cardapioRepository.findById(id);
+        if (cardapio.isPresent()){
+            cardapioRepository.deleteById(id);
+        }else {
+            throw new RecursoNaoEncontradoException("Cardapio não encontrado no cardápio");
+        }
+    }
+    public void deletarItemCardapio(Long id){
+        var itemCardapio = item.findById(id);
+        if (itemCardapio.isPresent()){
+            item.deleteById(id);
+        }else {
+            throw new RecursoNaoEncontradoException("Item não encontrado no cardápio");
+        }
+    }
+    }
+
