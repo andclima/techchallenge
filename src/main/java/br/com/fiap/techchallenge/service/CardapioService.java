@@ -42,6 +42,11 @@ public class CardapioService {
         );
         return response;
     }
+    public List<CardapioResponse> listarCardapios(){
+        List<Cardapio> listaCardapios = cardapioRepository.findAll();
+        var cardapios = listaCardapioResponseDTO(listaCardapios);
+        return cardapios;
+    }
     public ItemCardapioResponse buscarItemCardapio(Long id){
         ItemCardapio itemCardapio = item.findById(id).
                 orElseThrow(() -> new RecursoNaoEncontradoException("Nenhum item encontrado"));
@@ -109,6 +114,28 @@ public class CardapioService {
                 itemCardapio.getViagemSN(),
                 itemCardapio.getCaminhoFoto()
         );
+    }
+    private List<CardapioResponse> listaCardapioResponseDTO(List<Cardapio> cardapioLista){
+        return cardapioLista.stream().map(cardapio -> {
+            List<ItemCardapioResponse> itensResponse = cardapio.getItens() == null ? List.of() :
+                    cardapio.getItens().stream()
+                            .map(item -> new ItemCardapioResponse(
+                                    item.getId(),
+                                    item.getNome(),
+                                    item.getDescricao(),
+                                    item.getPreco(),
+                                    item.getViagemSN(),
+                                    item.getCaminhoFoto()
+                            ))
+                            .toList();
+
+            return new CardapioResponse(
+                    cardapio.getId(),
+                    cardapio.getNome(),
+                    cardapio.getRestaurante().getNome(),
+                    itensResponse
+            );
+        }).toList();
     }
     private CardapioResponse cardapioResponseDTO(Cardapio cardapio){
         List<ItemCardapioResponse> itensResponse =

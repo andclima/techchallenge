@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 public class CardapioController {
@@ -26,6 +27,11 @@ public class CardapioController {
     public ResponseEntity<ItemCardapioResponse> buscarItemCardapio(@PathVariable Long id){
         var itemCardapio = svc.buscarItemCardapio(id);
         return ResponseEntity.ok(itemCardapio);
+    }
+    @GetMapping("/cardapios")
+    public ResponseEntity<List<CardapioResponse>> listarCardapios(){
+        List<CardapioResponse> cardapios = svc.listarCardapios();
+        return ResponseEntity.ok().body(cardapios);
     }
     @PostMapping("/restaurante/cardapio")
     public ResponseEntity<CardapioResponse> criarCardapio(@Valid @RequestBody CreateCardapioRequest request){
