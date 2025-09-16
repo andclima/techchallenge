@@ -42,7 +42,12 @@ public class CardapioService {
         );
         return response;
     }
-    public Cardapio criarCardapio(CreateCardapioRequest request){
+    public ItemCardapioResponse buscarItemCardapio(Long id){
+        ItemCardapio itemCardapio = item.findById(id).
+                orElseThrow(() -> new RecursoNaoEncontradoException("Nenhum item encontrado"));
+        return itemCardapioResponseDTO(itemCardapio);
+    }
+    public CardapioResponse criarCardapio(CreateCardapioRequest request){
         Restaurante restaurante = restauranteRepository.findById(request.idRestaurante()).
                 orElseThrow(() -> new RecursoNaoEncontradoException("O Restaurante não foi encontrado"));
 
@@ -50,21 +55,24 @@ public class CardapioService {
             throw new DadoDuplicadoException("O restaurante já tem um cardápio");
         }
         Cardapio cardapio = new Cardapio(request.nomeCardapio(),restaurante);
-        return cardapioRepository.save(cardapio);
+        cardapioRepository.save(cardapio);
+        return cardapioResponseDTO(cardapio);
     }
-    public ItemCardapio criarItemCardapio(CreateItemCardapioRequest request){
+    public ItemCardapioResponse criarItemCardapio(CreateItemCardapioRequest request){
         Cardapio cardapio = cardapioRepository.findById(request.cardapio()).
                 orElseThrow(() -> new RecursoNaoEncontradoException("Cardapio não encontrado"));
         ItemCardapio itemCardapio = new ItemCardapio(request,cardapio);
-        return item.save(itemCardapio);
+        item.save(itemCardapio);
+        return itemCardapioResponseDTO(itemCardapio);
     }
-    public Cardapio updateCardapio(UpdateCardapioRequest request){
+    public CardapioResponse updateCardapio(UpdateCardapioRequest request){
         Cardapio cardapio = cardapioRepository.findById(request.id())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cardapio não encontrado"));
         cardapio.setNome(request.nomeCardapio());
-        return cardapioRepository.save(cardapio);
+        cardapioRepository.save(cardapio);
+        return cardapioResponseDTO(cardapio);
     }
-    public ItemCardapio updateItemCardapio(UpdateItemCardapioRequest request){
+    public ItemCardapioResponse updateItemCardapio(UpdateItemCardapioRequest request){
         ItemCardapio itemCardapio = item.findById(request.id())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Item do cardapio não encontrado"));
         itemCardapio.setNome(request.nomeItem());
@@ -73,7 +81,8 @@ public class CardapioService {
         itemCardapio.setViagemSN(request.viagemSN());
         itemCardapio.setCaminhoFoto("https://nuvem/minhanuvem/1234567/"+request.caminhoFoto());
 
-        return item.save(itemCardapio);
+        item.save(itemCardapio);
+        return itemCardapioResponseDTO(itemCardapio);
     }
     public void deletarCardapio(Long id){
         var cardapio = cardapioRepository.findById(id);
@@ -91,5 +100,27 @@ public class CardapioService {
             throw new RecursoNaoEncontradoException("Item não encontrado no cardápio");
         }
     }
+    private ItemCardapioResponse itemCardapioResponseDTO(ItemCardapio itemCardapio){
+        return new ItemCardapioResponse(
+                itemCardapio.getId(),
+                itemCardapio.getNome(),
+                itemCardapio.getDescricao(),
+                itemCardapio.getPreco(),
+                itemCardapio.getViagemSN(),
+                itemCardapio.getCaminhoFoto()
+        );
     }
-
+    private CardapioResponse cardapioResponseDTO(Cardapio cardapio){
+        List<ItemCardapioResponse> itensResponse =
+                cardapio.getItens() == null ? List.of() :
+                        cardapio.getItens().stream()
+                                .map(this::itemCardapioResponseDTO)
+                                .toList();
+        return new CardapioResponse(
+                cardapio.getId(),
+                cardapio.getNome(),
+                cardapio.getRestaurante().getNome(),
+                itensResponse
+        );
+    }
+    }

@@ -5,6 +5,9 @@ import br.com.fiap.techchallenge.service.CardapioService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 public class CardapioController {
@@ -19,35 +22,49 @@ public class CardapioController {
         var cardapio = svc.buscarCardapioDoRestaurante(idRestaurante);
         return ResponseEntity.ok(cardapio);
     }
+    @GetMapping("item-cardapio/{id}")
+    public ResponseEntity<ItemCardapioResponse> buscarItemCardapio(@PathVariable Long id){
+        var itemCardapio = svc.buscarItemCardapio(id);
+        return ResponseEntity.ok(itemCardapio);
+    }
     @PostMapping("/restaurante/cardapio")
-    public ResponseEntity criarCardapio(@Valid @RequestBody CreateCardapioRequest request){
-        svc.criarCardapio(request);
-        return ResponseEntity.ok("Cardápio criado com sucesso");
+    public ResponseEntity<CardapioResponse> criarCardapio(@Valid @RequestBody CreateCardapioRequest request){
+        CardapioResponse novoCardapio = svc.criarCardapio(request);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(novoCardapio.id())
+                .toUri();
+        return ResponseEntity.created(location).body(novoCardapio);
     }
     @PostMapping("/item-cardapio")
-    public ResponseEntity criarItemCardapio(@Valid @RequestBody CreateItemCardapioRequest request){
-        svc.criarItemCardapio(request);
-        return ResponseEntity.ok("Item do cardapio criado com sucesso");
+    public ResponseEntity<ItemCardapioResponse> criarItemCardapio(@Valid @RequestBody CreateItemCardapioRequest request){
+        ItemCardapioResponse novoItemCardapio = svc.criarItemCardapio(request);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(novoItemCardapio.id())
+                .toUri();
+        return ResponseEntity.created(location).body(novoItemCardapio);
     }
     @PutMapping("/restaurante/cardapio")
     public ResponseEntity atualizarCardapio(@Valid @RequestBody UpdateCardapioRequest request){
-        svc.updateCardapio(request);
-        return ResponseEntity.ok("cardapio editado com sucesso");
+        CardapioResponse novoCardapio = svc.updateCardapio(request);
+        return ResponseEntity.ok(novoCardapio);
     }
     @PutMapping("/item-cardapio")
     public ResponseEntity atualizarItemCardapio(@Valid @RequestBody UpdateItemCardapioRequest request){
-        svc.updateItemCardapio(request);
-        return ResponseEntity.ok("Item do cardapio editado com sucesso");
+        ItemCardapioResponse novoItem = svc.updateItemCardapio(request);
+        return ResponseEntity.ok(novoItem);
     }
-
     @DeleteMapping("/cardapio/{id}")
     public ResponseEntity deletarCardapio(@PathVariable Long id){
         svc.deletarCardapio(id);
-        return ResponseEntity.ok("Cardapio deletado com sucesso");
+        return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/item-cardapio/{id}")
     public ResponseEntity deletarItemCardapio(@PathVariable Long id){
         svc.deletarItemCardapio(id);
-        return ResponseEntity.ok("Item deletado com sucesso");
+        return ResponseEntity.noContent().build();
     }
 }

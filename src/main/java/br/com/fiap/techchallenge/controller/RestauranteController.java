@@ -7,6 +7,9 @@ import br.com.fiap.techchallenge.service.RestauranteService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -16,20 +19,30 @@ public class RestauranteController {
     public RestauranteController(RestauranteService svc) {
         this.svc = svc;
     }
-    @GetMapping("/restaurantes")
+    @GetMapping("/restaurante")
     public ResponseEntity<List<RestauranteResponse>> listRestaurantes(){
         var listaDeRestaurantes = svc.buscarRestaurante();
         return ResponseEntity.ok(listaDeRestaurantes);
     }
+    @GetMapping("/restaurante/{id}")
+    public ResponseEntity<RestauranteResponse> getRestaurante(@PathVariable Long id){
+        var restaurante = svc.buscarRestauranteId(id);
+        return ResponseEntity.ok(restaurante);
+    }
     @PostMapping("/restaurante")
-    public ResponseEntity createRestaurante(@Valid @RequestBody CreateRestauranteRequest request){
-        svc.criarRestaurante(request);
-        return ResponseEntity.ok("Restaurante criado com sucesso");
+    public ResponseEntity<RestauranteResponse> createRestaurante(@Valid @RequestBody CreateRestauranteRequest request){
+        RestauranteResponse novoRestaurante = svc.criarRestaurante(request);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(novoRestaurante.id())
+                .toUri();
+        return ResponseEntity.created(location).body(novoRestaurante);
     }
     @PutMapping("/restaurante")
-    public ResponseEntity updateRestaurante(@Valid @RequestBody UpdateRestauranteRequest request){
-        svc.editarRestaurante(request);
-        return ResponseEntity.ok("Restaurante editado com sucesso");
+    public ResponseEntity<RestauranteResponse> updateRestaurante(@Valid @RequestBody UpdateRestauranteRequest request){
+        RestauranteResponse restauranteAtualizado = svc.editarRestaurante(request);
+        return ResponseEntity.ok(restauranteAtualizado);
     }
     @DeleteMapping("/restaurante/{id}")
     public ResponseEntity deleteRestaurante(@PathVariable Long id){

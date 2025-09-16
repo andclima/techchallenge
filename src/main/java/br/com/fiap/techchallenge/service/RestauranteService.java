@@ -31,7 +31,12 @@ public class RestauranteService {
         var restaurantes = restauranteResponseMethod(restauranteList);
         return restaurantes;
     }
-    public Restaurante criarRestaurante(CreateRestauranteRequest request){
+    public RestauranteResponse buscarRestauranteId(Long id){
+        var restaurante = restauranteRepository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Restaurante não encontrado"));
+        return restauranteResponseDTO(restaurante);
+    }
+    public RestauranteResponse criarRestaurante(CreateRestauranteRequest request){
         if (restauranteRepository.findByNomeAndCep(request.nomeRestaurante(), request.cep()).isPresent()){
             throw new DadoDuplicadoException("O restaurante já existe");
         }
@@ -41,9 +46,10 @@ public class RestauranteService {
         TipoCozinha cozinha = tipoCozinhaRepository.findById(request.tipoCozinha())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Tipo de cozinha não encontrado"));
         Restaurante restaurante = new Restaurante(request,cozinha,dono);
-        return restauranteRepository.save(restaurante);
+        restauranteRepository.save(restaurante);
+        return restauranteResponseDTO(restaurante);
     }
-    public Restaurante editarRestaurante(UpdateRestauranteRequest request){
+    public RestauranteResponse editarRestaurante(UpdateRestauranteRequest request){
         Restaurante restaurante = restauranteRepository.findById(request.id())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Restaurante não encontrado"));
         DonoRestaurante dono = donoRestauranteRepository.findById(request.dono()).
@@ -59,8 +65,8 @@ public class RestauranteService {
         restaurante.setDono(dono);
         restaurante.setHoraFuncionamento(request.horaAbertura(),request.horaFechamento());
         restaurante.setContato(request.contato());
-
-        return restauranteRepository.save(restaurante);
+        restauranteRepository.save(restaurante);
+        return restauranteResponseDTO(restaurante);
     }
     public void excluirRestaurante(Long id){
         Restaurante restaurante = restauranteRepository.findById(id)
@@ -80,5 +86,18 @@ public class RestauranteService {
                 restaurante.getDono().getEmail()
         )).toList();
         return responseList;
+    }
+    private RestauranteResponse restauranteResponseDTO(Restaurante restaurante){
+        return new RestauranteResponse(
+                restaurante.getId(),
+                restaurante.getNome(),
+                restaurante.getEndereco(),
+                restaurante.getCep(),
+                restaurante.getTipoCozinha().getTipo(),
+                restaurante.getHoraFuncionamento(),
+                restaurante.getContato(),
+                restaurante.getDono().getNome(),
+                restaurante.getDono().getEmail()
+        );
     }
 }

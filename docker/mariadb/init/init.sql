@@ -40,3 +40,7 @@ INSERT INTO tipo_cozinha(tipo) VALUES('Montagem');
 INSERT INTO tipo_cozinha(tipo) VALUES('Paralela');
 INSERT INTO tipo_cozinha(tipo) VALUES('Em U');
 
+ALTER TABLE item_cardapio
+MODIFY viagemSN TINYINT(1);
+
+
