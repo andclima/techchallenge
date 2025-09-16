@@ -34,4 +34,23 @@ public class ItemCardapio {
         this.cardapio = cardapio;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+
+    public void setViagemSN(Boolean viagemSN) {
+        this.viagemSN = viagemSN;
+    }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
+    }
 }

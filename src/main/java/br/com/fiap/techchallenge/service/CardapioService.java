@@ -1,9 +1,6 @@
 package br.com.fiap.techchallenge.service;
 
-import br.com.fiap.techchallenge.dto.CardapioResponse;
-import br.com.fiap.techchallenge.dto.CreateCardapioRequest;
-import br.com.fiap.techchallenge.dto.CreateItemCardapioRequest;
-import br.com.fiap.techchallenge.dto.ItemCardapioResponse;
+import br.com.fiap.techchallenge.dto.*;
 import br.com.fiap.techchallenge.exception.DadoDuplicadoException;
 import br.com.fiap.techchallenge.exception.RecursoNaoEncontradoException;
 import br.com.fiap.techchallenge.model.Cardapio;
@@ -59,6 +56,23 @@ public class CardapioService {
         Cardapio cardapio = cardapioRepository.findById(request.cardapio()).
                 orElseThrow(() -> new RecursoNaoEncontradoException("Cardapio não encontrado"));
         ItemCardapio itemCardapio = new ItemCardapio(request,cardapio);
+        return item.save(itemCardapio);
+    }
+    public Cardapio updateCardapio(UpdateCardapioRequest request){
+        Cardapio cardapio = cardapioRepository.findById(request.id())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Cardapio não encontrado"));
+        cardapio.setNome(request.nomeCardapio());
+        return cardapioRepository.save(cardapio);
+    }
+    public ItemCardapio updateItemCardapio(UpdateItemCardapioRequest request){
+        ItemCardapio itemCardapio = item.findById(request.id())
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Item do cardapio não encontrado"));
+        itemCardapio.setNome(request.nomeItem());
+        itemCardapio.setDescricao(request.descricao());
+        itemCardapio.setPreco(request.preco());
+        itemCardapio.setViagemSN(request.viagemSN());
+        itemCardapio.setCaminhoFoto("https://nuvem/minhanuvem/1234567/"+request.caminhoFoto());
+
         return item.save(itemCardapio);
     }
     public void deletarCardapio(Long id){

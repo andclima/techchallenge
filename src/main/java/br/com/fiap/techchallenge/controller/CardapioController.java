@@ -1,8 +1,6 @@
 package br.com.fiap.techchallenge.controller;
 
-import br.com.fiap.techchallenge.dto.CardapioResponse;
-import br.com.fiap.techchallenge.dto.CreateCardapioRequest;
-import br.com.fiap.techchallenge.dto.CreateItemCardapioRequest;
+import br.com.fiap.techchallenge.dto.*;
 import br.com.fiap.techchallenge.service.CardapioService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +29,21 @@ public class CardapioController {
         svc.criarItemCardapio(request);
         return ResponseEntity.ok("Item do cardapio criado com sucesso");
     }
+    @PutMapping("/restaurante/cardapio")
+    public ResponseEntity atualizarCardapio(@Valid @RequestBody UpdateCardapioRequest request){
+        svc.updateCardapio(request);
+        return ResponseEntity.ok("cardapio editado com sucesso");
+    }
+    @PutMapping("/item-cardapio")
+    public ResponseEntity atualizarItemCardapio(@Valid @RequestBody UpdateItemCardapioRequest request){
+        svc.updateItemCardapio(request);
+        return ResponseEntity.ok("Item do cardapio editado com sucesso");
+    }
+
     @DeleteMapping("/cardapio/{id}")
     public ResponseEntity deletarCardapio(@PathVariable Long id){
         svc.deletarCardapio(id);
-        return ResponseEntity.ok("Item deletado com sucesso");
+        return ResponseEntity.ok("Cardapio deletado com sucesso");
     }
     @DeleteMapping("/item-cardapio/{id}")
     public ResponseEntity deletarItemCardapio(@PathVariable Long id){
