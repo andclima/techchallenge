@@ -15,8 +15,8 @@ public class Cardapio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurante_id",referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurante_id", referencedColumnName = "id")
     private Restaurante restaurante;
     @OneToMany(mappedBy = "cardapio", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemCardapio> itens;

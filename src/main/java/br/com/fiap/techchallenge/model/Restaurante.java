@@ -22,7 +22,7 @@ public class Restaurante {
     @JoinColumn(name = "tipo_cozinha_id", referencedColumnName = "id")
     private TipoCozinha tipoCozinha;
     private String horaFuncionamento;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dono_id", referencedColumnName = "idUsuario")//
     private DonoRestaurante dono;
     private String contato;
