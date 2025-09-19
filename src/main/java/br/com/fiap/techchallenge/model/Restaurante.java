@@ -22,10 +22,13 @@ public class Restaurante {
     @JoinColumn(name = "tipo_cozinha_id", referencedColumnName = "id")
     private TipoCozinha tipoCozinha;
     private String horaFuncionamento;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "dono_id", referencedColumnName = "idUsuario")//
     private DonoRestaurante dono;
     private String contato;
+
+    @OneToOne(mappedBy = "restaurante", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cardapio cardapio;
 
     public Restaurante() {
     }
