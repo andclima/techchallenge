@@ -1,7 +1,7 @@
 package br.com.fiap.techchallenge.dto;
 
 import br.com.fiap.techchallenge.model.DonoRestaurante;
-//import br.com.fiap.techchallenge.model.TipoCozinha;
+
 
 
 public record RestauranteResponse(
